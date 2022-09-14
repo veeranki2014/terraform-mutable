@@ -4,3 +4,5 @@ SUBNET_AZ               = ["us-east-1a","us-east-1b"]
 VPC_PUBLIC_CIDR         = "10.100.0.0/22"
 PUBLIC_SUBNET_CIDRS     = ["10.100.0.0/23","10.100.2.0/23"]
 ENV                     = "dev"
+DEFAULT_VPC_ID          = "vpc-8896f1f5"
+DEFAULT_VPC_CIDR        = "172.31.0.0/16"
