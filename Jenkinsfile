@@ -13,5 +13,13 @@ pipeline{
          '''
       }
     }
+    stage('DB Apply'){
+      steps{
+        sh '''
+          cd databases
+          make ${ACTION}
+         '''
+      }
+    }
   }
 }
