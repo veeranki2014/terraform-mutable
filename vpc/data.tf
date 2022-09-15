@@ -3,5 +3,5 @@ data "aws_route_table" "default" {
 }
 
 output "test" {
-  value = data.aws_route_table
+  value = data.aws_route_table.default
 }
