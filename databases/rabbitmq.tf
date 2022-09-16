@@ -1,24 +1,24 @@
 # Request a spot instance at $0.03
-resource "aws_spot_instance_request" "mongodb" {
+resource "aws_spot_instance_request" "rabbitmq" {
   ami                         = data.aws_ami.ami.id
   instance_type               = "t3.micro"
-  vpc_security_group_ids      = [aws_security_group.allow_mongodb.id]
+  vpc_security_group_ids      = [aws_security_group.allow_rabbitmq.id]
   subnet_id                   = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS[0]
   wait_for_fulfillment        = true
     tags                      = {
-      Name                    = "mangodb-${var.ENV}"
+      Name                    = "rabbitmq-${var.ENV}"
     }
 }
 
 resource "aws_ec2_tag" "mango-name-tag" {
-  resource_id                 = aws_spot_instance_request.mongodb.spot_instance_id
+  resource_id                 = aws_spot_instance_request.rabbitmq.spot_instance_id
   key                         = "Name"
-  value                       = "mongodb-${var.ENV}"
+  value                       = "rabbitmq-${var.ENV}"
 }
 
-resource "aws_security_group" "allow_mongodb" {
-  name                        = "allow_mangodb_${var.ENV}"
-  description                 = "allow_mangodb_${var.ENV}"
+resource "aws_security_group" "allow_rabbitmq" {
+  name                        = "allow_rabbitmq_${var.ENV}"
+  description                 = "allow_rabbitmq_${var.ENV}"
   vpc_id                      = data.terraform_remote_state.vpc.outputs.VPC_ID
 
   ingress                    {
@@ -29,9 +29,9 @@ resource "aws_security_group" "allow_mongodb" {
     cidr_blocks               = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR, data.terraform_remote_state.vpc.outputs.DEFAULT_VPC_CIDR]
    }
   ingress                    {
-    description               = "MONGODB"
-    from_port                 = 27017
-    to_port                   = 27017
+    description               = "RABBITMQ"
+    from_port                 = 5672
+    to_port                   = 5672
     protocol                  = "tcp"
     cidr_blocks               = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR, data.terraform_remote_state.vpc.outputs.DEFAULT_VPC_CIDR]
   }
@@ -44,7 +44,7 @@ resource "aws_security_group" "allow_mongodb" {
   }
 
   tags                        = {
-    Name                      = "mangodb-${var.ENV}"
+    Name                      = "rabbitmq-${var.ENV}"
     Environment               = var.ENV
   }
 }
@@ -52,12 +52,23 @@ resource "aws_security_group" "allow_mongodb" {
 resource "null_resource" "mongodb-apply" {
   provisioner "remote-exec" {
     connection {
-      host                     = aws_spot_instance_request.mongodb.private_ip
+      host                     = aws_spot_instance_request.rabbitmq.private_ip
       user                     = "centos"
       password                 = "DevOps321"
     }
       inline = [
-
+        "yum install -y yum-utils",
+        "yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo",
+        "yum -y install terraform",
+        "ansible-pull -I localhost, -U https://veeranki20144891@dev.azure.com/veeranki20144891/DevOps/_git/ansible roboshop-pull.yml -e COMPONENT=rabbitmq -e ENV=${var.ENV}"
       ]
     }
+}
+
+resource "aws_route53_record" "rabbitmq" {
+  zone_id                       = data.terraform_remote_state.vpc.outputs.INTERNAL_DNS_ZONE_ID
+  name                          = "rabbitmq-${var.ENV}.roboshop.internal"
+  type                          = "A"
+  ttl                           = 300
+  records                       = [aws_spot_instance_request.rabbitmq.private_ip]
 }

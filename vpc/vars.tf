@@ -6,3 +6,4 @@ variable "SUBNET_AZ"            {}
 variable "ENV"                  {}
 variable "DEFAULT_VPC_ID"       {}
 variable "DEFAULT_VPC_CIDR"     {}
+variable "INTERNAL_DNS_ZONE_ID" {}

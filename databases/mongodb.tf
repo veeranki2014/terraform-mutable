@@ -57,7 +57,18 @@ resource "null_resource" "mongodb-apply" {
       password                 = "DevOps321"
     }
       inline = [
-
+        "yum install -y yum-utils",
+        "yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo",
+        "yum -y install terraform",
+        "ansible-pull -I localhost, -U https://veeranki20144891@dev.azure.com/veeranki20144891/DevOps/_git/ansible roboshop-pull.yml -e COMPONENT=mongodb -e ENV=${var.ENV}"
       ]
     }
+}
+
+resource "aws_route53_record" "mongodb" {
+  zone_id                       = data.terraform_remote_state.vpc.outputs.INTERNAL_DNS_ZONE_ID
+  name                          = "mongodb-${var.ENV}.roboshop.internal"
+  type                          = "A"
+  ttl                           = 300
+  records                       = [aws_spot_instance_request.mongodb.private_ip]
 }

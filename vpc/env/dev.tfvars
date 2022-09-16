@@ -6,3 +6,4 @@ PUBLIC_SUBNET_CIDRS     = ["10.100.0.0/23","10.100.2.0/23"]
 ENV                     = "dev"
 DEFAULT_VPC_ID          = "vpc-8896f1f5"
 DEFAULT_VPC_CIDR        = "172.31.0.0/16"
+INTERNAL_DNS_ZONE_ID    = "Z02280072PQMTU5GAFQA"
