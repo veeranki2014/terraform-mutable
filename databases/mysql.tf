@@ -10,7 +10,7 @@ resource "aws_db_instance" "mysql" {
   skip_final_snapshot             = true
   db_subnet_group_name            = aws_db_subnet_group.mysql.name
   identifier                      = "mysql-${var.ENV}"
-  vpc_security_group_ids          = [aws_db_security_group.allow_mysql.id]
+  vpc_security_group_ids          = [aws_security_group.allow_mysql.id]
 }
 
 resource "aws_db_parameter_group" "mysql" {
@@ -27,7 +27,7 @@ resource "aws_db_subnet_group" "mysql" {
 }
 
 
-resource "aws_db_security_group" "allow_mysql" {
+resource "aws_security_group" "allow_mysql" {
   name                          = "allow_mysql_${var.ENV}"
   description                   = "allow_mysql_${var.ENV}"
   vpc_id                        = data.terraform_remote_state.vpc.outputs.VPC_ID
@@ -71,4 +71,5 @@ resource "aws_route53_record" "mysql" {
   type                        = "CNAME"
   ttl                         = "300"
   records                     = [aws_db_instance.mysql.address]
-}*/
+}*//*
+
