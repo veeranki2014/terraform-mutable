@@ -10,7 +10,7 @@ resource "aws_spot_instance_request" "rabbitmq" {
     }
 }
 
-resource "aws_ec2_tag" "mango-name-tag" {
+resource "aws_ec2_tag" "rabbitmq-name-tag" {
   resource_id                 = aws_spot_instance_request.rabbitmq.spot_instance_id
   key                         = "Name"
   value                       = "rabbitmq-${var.ENV}"
