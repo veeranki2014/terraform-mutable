@@ -52,6 +52,24 @@ resource "aws_security_group" "allow_rabbitmq" {
 resource "null_resource" "rabbitmq-apply" {
   provisioner "remote-exec" {
     connection {
+      host                      = aws_spot_instance_request.rabbitmq.private_ip
+      user                      = "centos"
+      password                  = "DevOps321"
+    }
+
+    inline = [
+      "sudo yum install python3-pip -y",
+      "sudo pip3 install pip --upgrade",
+      "sudo pip3 install ansible",
+      "ansible-pull -i localhost, -U https://DevOps-Batches@dev.azure.com/DevOps-Batches/DevOps57/_git/ansible roboshop-pull.yml -e COMPONENT=rabbitmq -e ENV=${var.ENV}"
+    ]
+
+  }
+}
+
+/*resource "null_resource" "rabbitmq-apply" {
+  provisioner "remote-exec" {
+    connection {
       host                     = aws_spot_instance_request.rabbitmq.private_ip
       user                     = "centos"
       password                 = "DevOps321"
@@ -63,7 +81,7 @@ resource "null_resource" "rabbitmq-apply" {
         "ansible-pull -i localhost, -u https://veeranki20144891@dev.azure.com/veeranki20144891/DevOps/_git/ansible roboshop-pull.yml -e COMPONENT=rabbitmq -e ENV=${var.ENV}"
       ]
     }
-}
+}*/
 
 resource "aws_route53_record" "rabbitmq" {
   zone_id                       = data.terraform_remote_state.vpc.outputs.INTERNAL_DNS_ZONE_ID
