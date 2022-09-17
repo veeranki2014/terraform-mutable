@@ -57,9 +57,9 @@ resource "null_resource" "rabbitmq-apply" {
       password                 = "DevOps321"
     }
       inline = [
-        "sudo yum install -y yum-utils",
-        "sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo",
-        "sudo yum -y install terraform",
+        "sudo yum install python3-pip -y",
+        "sudo pip3 install pip --upgrade",
+        "sudo pip3 install ansible",
         "ansible-pull -i localhost, -u https://veeranki20144891@dev.azure.com/veeranki20144891/DevOps/_git/ansible roboshop-pull.yml -e COMPONENT=rabbitmq -e ENV=${var.ENV}"
       ]
     }
