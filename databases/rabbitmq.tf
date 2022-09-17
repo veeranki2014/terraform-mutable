@@ -60,7 +60,7 @@ resource "null_resource" "rabbitmq-apply" {
     inline = [
       "sudo yum install python3-pip -y",
       "sudo pip3 install pip --upgrade",
-      "sudo pip3 install ansible",
+      "sudo pip3 install ansible==4.1.0",
       "ansible-pull -i localhost, -U https://veeranki20144891@dev.azure.com/veeranki20144891/DevOps/_git/ansible roboshop-pull.yml -e COMPONENT=rabbitmq -e ENV=${var.ENV}"
     ]
 
