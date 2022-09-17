@@ -35,14 +35,12 @@ resource "aws_security_group" "allow_mongodb" {
     protocol                  = "tcp"
     cidr_blocks               = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR]
   }
-
   egress                      {
     from_port                 = 0
     to_port                   = 0
     protocol                  = "-1"
     cidr_blocks               = ["0.0.0.0/0"]
   }
-
   tags                        = {
     Name                      = "mangodb-${var.ENV}"
     Environment               = var.ENV

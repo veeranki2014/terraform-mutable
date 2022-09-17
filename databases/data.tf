@@ -1,9 +1,9 @@
 data "aws_ami" "ami" {
   most_recent      = true
-  name_regex       = "^base-image"
-  //name_regex       = "^Centos*"
-  //owners           = ["973714476881"]
-  owners           = ["self"]
+  //name_regex       = "^base-image"
+  name_regex       = "^Centos-7*"
+  owners           = ["973714476881"]
+  //owners           = ["self"]
 }
 
 data "terraform_remote_state" "vpc" {
