@@ -33,7 +33,7 @@ resource "aws_security_group" "allow_rabbitmq" {
     from_port                 = 5672
     to_port                   = 5672
     protocol                  = "tcp"
-    cidr_blocks               = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR, data.terraform_remote_state.vpc.outputs.DEFAULT_VPC_CIDR]
+    cidr_blocks               = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR]
   }
 
   egress                      {
@@ -44,7 +44,7 @@ resource "aws_security_group" "allow_rabbitmq" {
   }
 
   tags                        = {
-    Name                      = "rabbitmq-${var.ENV}"
+    Name                      = "allow_rabbitmq_${var.ENV}"
     Environment               = var.ENV
   }
 }
