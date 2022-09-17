@@ -60,7 +60,7 @@ resource "null_resource" "mongodb-apply" {
         "sudo yum install -y yum-utils",
         "sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo",
         "sudo yum -y install terraform",
-        "ansible-pull -I localhost, -U https://veeranki20144891@dev.azure.com/veeranki20144891/DevOps/_git/ansible roboshop-pull.yml -e COMPONENT=mongodb -e ENV=${var.ENV}"
+        "ansible-pull -i localhost, -U https://veeranki20144891@dev.azure.com/veeranki20144891/DevOps/_git/ansible roboshop-pull.yml -e COMPONENT=mongodb -e ENV=${var.ENV}"
       ]
     }
 }
