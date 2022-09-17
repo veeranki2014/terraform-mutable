@@ -27,28 +27,37 @@ resource "aws_db_subnet_group" "mysql" {
 }
 
 resource "aws_security_group" "allow_mysql" {
-  name                          = "allow_mysql_${var.ENV}"
-  description                   = "allow_mysql_${var.ENV}"
-  vpc_id                        = data.terraform_remote_state.vpc.outputs.VPC_ID
-
-  ingress                       {
-    description               = "MYSQL"
-    from_port                 = 3306
-    to_port                   = 3306
-    protocol                  = "tcp"
-    cidr_blocks               = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR, data.terraform_remote_state.vpc.outputs.DEFAULT_VPC_CIDR]
+  name                            = "allow_mysql_${var.ENV}"
+  description                     = "allow_mysql_${var.ENV}"
+  vpc_id                          = data.terraform_remote_state.vpc.outputs.VPC_ID
+  ingress                         {
+    description                   = "MYSQL"
+    from_port                     = 3306
+    to_port                       = 3306
+    protocol                      = "tcp"
+    cidr_blocks                   = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR, data.terraform_remote_state.vpc.outputs.DEFAULT_VPC_CIDR]
   }
-
-  egress                        {
-    from_port                 = 0
-    to_port                   = 0
-    protocol                  = "-1"
-    cidr_blocks               = ["0.0.0.0/0"]
+  egress                          {
+    from_port                     = 0
+    to_port                       = 0
+    protocol                      = "-1"
+    cidr_blocks                   = ["0.0.0.0/0"]
   }
+  tags                            = {
+    Name                          = "allow_mysql_${var.ENV}"
+    Environment                   = var.ENV
+  }
+}
 
-  tags                          = {
-    Name                        = "allow_mysql_${var.ENV}"
-    Environment                 = var.ENV
+resource "null_resource" "mysql-schema" {
+  provisioner "local-exec" {
+    command =<<EOC
+curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
+cd /tmp
+unzip -o mysql.zip
+cd mysql-main
+mysql -h ${aws_db_instance.mysql.address} -uadmin -pRoboShop123 <shipping.sql
+EOC
   }
 }
 
