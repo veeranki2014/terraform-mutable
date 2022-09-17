@@ -53,23 +53,3 @@ resource "aws_security_group" "allow_mysql" {
   }
 }
 
-/*resource "null_resource" "mysql-schema" {
-  provisioner "local-exec" {
-    command =<<EOC
-curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
-cd /tmp
-unzip -o mysql.zip
-cd mysql-main
-mysql -h ${aws_db_instance.mysql.address} -uadmin -pRoboShop123 <shipping.sql
-EOC
-  }
-}
-
-resource "aws_route53_record" "mysql" {
-  zone_id                     = data.terraform_remote_state.vpc.outputs.INTERNAL_DNS_ZONE_ID
-  name                        = "mysql-${var.ENV}.roboshop.internal"
-  type                        = "CNAME"
-  ttl                         = "300"
-  records                     = [aws_db_instance.mysql.address]
-}*//*
-
