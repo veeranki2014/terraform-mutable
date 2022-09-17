@@ -19,12 +19,13 @@ resource "aws_db_parameter_group" "mysql" {
 }
 
 resource "aws_db_subnet_group" "mysql" {
-  name                            = "mysql-${var.ENV}-subnet-group"
-  subnet_ids                      = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS
-  tags                            = {
-    Name                          = "mysql-${var.ENV}-subnet-group"
+  name       = "mysql-${var.ENV}-subnet-group"
+  subnet_ids = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS
+  tags       = {
+    Name = "mysql-${var.ENV}-subnet-group"
   }
 }
+
 
 resource "aws_db_security_group" "allow_mysql" {
   name                          = "allow_mysql_${var.ENV}"
@@ -52,7 +53,7 @@ resource "aws_db_security_group" "allow_mysql" {
   }
 }
 
-resource "null_resource" "mysql-schema" {
+/*resource "null_resource" "mysql-schema" {
   provisioner "local-exec" {
     command =<<EOC
 curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
@@ -70,4 +71,4 @@ resource "aws_route53_record" "mysql" {
   type                        = "CNAME"
   ttl                         = "300"
   records                     = [aws_db_instance.mysql.address]
-}
+}*/
