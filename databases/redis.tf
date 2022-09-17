@@ -7,8 +7,12 @@ resource "aws_elasticache_cluster" "redis" {
   engine_version                  = "6.x"
   port                            = 6379
   subnet_group_name               = aws_elasticache_subnet_group.redis.name
-  security_group_ids              = [aws_security_group.allow_redis.name]
+  security_group_ids              = [aws_elasticache_security_group.redis.name]
+}
 
+resource "aws_elasticache_security_group" "redis" {
+  name                 = "redis-${var.ENV}-subnet-group"
+  security_group_names = [aws_security_group.allow_redis.name]
 }
 
 resource "aws_elasticache_subnet_group" "redis" {

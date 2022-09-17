@@ -1,6 +1,6 @@
 resource "aws_db_instance" "mysql" {
   allocated_storage               = 10
-  name                            = "terraformdefault"
+  db_name                         = "terraformdefault"
   engine                          = "mysql"
   engine_version                  = "5.7"
   instance_class                  = var.RDS_MYSQL_INSTANCE_TYPE
