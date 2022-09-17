@@ -41,16 +41,14 @@ resource "aws_security_group" "allow_redis" {
   }
 }
 
-/*
 resource "aws_route53_record" "redis" {
   zone_id                       = data.terraform_remote_state.vpc.outputs.INTERNAL_DNS_ZONE_ID
-  name                          = "mysql-${var.ENV}.roboshop.internal"
+  name                          = "redis-${var.ENV}.roboshop.internal"
   type                          = "CNAME"
   ttl                           = 300
-  records                       = [aws_db_instance.mysql.address]
+  records                       = [aws_elasticache_cluster.redis.cache_nodes[0].address]
 }
-*/
 
-output "redis" {
+/*output "redis" {
   value = aws_elasticache_cluster.redis
-}
+}*/
