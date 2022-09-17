@@ -27,8 +27,27 @@ resource "aws_db_subnet_group" "mysql" {
 }
 
 resource "aws_db_security_group" "mysql" {
-  name                            = "mysql-${var.ENV}"
-  ingress                                   {
-    cidr                          = data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR
+  name                          = "allow_mysql_${var.ENV}"
+  description                   = "allow_mysql_${var.ENV}"
+  vpc_id                        = data.terraform_remote_state.vpc.outputs.VPC_ID
+
+  ingress                       {
+    description               = "MYSQL"
+    from_port                 = 3306
+    to_port                   = 3306
+    protocol                  = "tcp"
+    cidr_blocks               = [data.terraform_remote_state.vpc.outputs.VPC_PRIVATE_CIDR, data.terraform_remote_state.vpc.outputs.DEFAULT_VPC_CIDR]
+  }
+
+  egress                        {
+    from_port                 = 0
+    to_port                   = 0
+    protocol                  = "-1"
+    cidr_blocks               = ["0.0.0.0/0"]
+  }
+
+  tags                          = {
+    Name                        = "allow_mysql_${var.ENV}"
+    Environment                 = var.ENV
   }
 }
