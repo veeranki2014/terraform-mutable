@@ -14,7 +14,7 @@ data "terraform_remote_state" "vpc" {
     region            = "us-east-1"
   }
 }
-k
+
 
 /*data "aws_ami" "ami" {
   //most_recent      = true
