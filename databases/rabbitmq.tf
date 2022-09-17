@@ -49,7 +49,7 @@ resource "aws_security_group" "allow_rabbitmq" {
   }
 }
 
-resource "null_resource" "mongodb-apply" {
+resource "null_resource" "rabbitmq-apply" {
   provisioner "remote-exec" {
     connection {
       host                     = aws_spot_instance_request.rabbitmq.private_ip
