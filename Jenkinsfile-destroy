@@ -5,7 +5,7 @@ pipeline{
     choice(name: 'ACTION', choices: ['dev-destroy', 'prod-destroy'], description: 'Choose Environment')
   }
   stages{
-    stage('Databases Destroy'){
+    stage('DB Destroy'){
       steps{
         sh '''
           cd databases
