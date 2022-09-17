@@ -67,7 +67,7 @@ curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/a
 cd /tmp
 unzip -o mysql.zip
 cd mysql-main
-mysql -h ${aws_db_instance.mysql.address} -uadmin -pRoboShop123 <shipping.sql
+mysql -h ${aws_db_instance.mysql.address} -uadmin -pRoboshop123 <shipping.sql
 EOC
   }
 }
