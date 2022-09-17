@@ -49,6 +49,17 @@ resource "aws_security_group" "allow_mysql" {
   }
 }
 
+/*resource "null_resource" "mysql-schema" {
+  provisioner "local-exec" {
+    command =<<EOC
+curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
+cd /tmp
+unzip -o mysql.zip
+cd mysql-main
+mysql -h ${aws_db_instance.mysql.address} -uadmin -pRoboShop123 <shipping.sql
+EOC
+  }
+}*/
 resource "null_resource" "mysql-schema" {
   provisioner "local-exec" {
     command =<<EOC
