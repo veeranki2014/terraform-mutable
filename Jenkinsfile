@@ -21,5 +21,13 @@ pipeline{
          '''
       }
     }
+    stage('ALB Apply'){
+      steps{
+        sh '''
+          cd alb
+          make ${ACTION}
+         '''
+      }
+    }
   }
 }
